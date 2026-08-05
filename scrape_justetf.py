@@ -14,6 +14,8 @@ PHP بس.
 ⚠️ إضافة صندوق جديد للتغطية: زيد سطر ISIN جديد بـ isins.txt وادفع
 (commit) — أول تشغيل جاي رح يضيفه تلقائياً.
 """
+import dataclasses
+import datetime
 import json
 import sys
 import time
@@ -43,6 +45,24 @@ def load_isins():
     return sorted(set(isins))
 
 
+def jsonable_quote(quote):
+    """يحوّل كائن Quote (dataclass فيه datetime) لقاموس عادي قابل لـ json.dumps."""
+    if quote is None:
+        return None
+    if dataclasses.is_dataclass(quote):
+        d = dataclasses.asdict(quote)
+    elif hasattr(quote, "_asdict"):  # namedtuple احتياطي
+        d = dict(quote._asdict())
+    elif hasattr(quote, "__dict__"):
+        d = dict(vars(quote))
+    else:
+        return str(quote)
+    for k, v in d.items():
+        if isinstance(v, (datetime.datetime, datetime.date)):
+            d[k] = v.isoformat()
+    return d
+
+
 def scrape_one(isin):
     overview = justetf_scraping.get_etf_overview(isin)
     return {
@@ -69,7 +89,7 @@ def scrape_one(isin):
             {"name": h.get("name"), "isin": h.get("isin"), "pct": h.get("percentage")}
             for h in (overview.get("top_holdings") or [])
         ],
-        "gettexQuote": overview.get("gettex"),
+        "gettexQuote": jsonable_quote(overview.get("gettex")),
     }
 
 
