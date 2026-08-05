@@ -28,8 +28,15 @@ import justetf_scraping
 ISINS_FILE = Path(__file__).parent / "isins.txt"
 OUTPUT_FILE = Path(__file__).parent / "justetf_snapshot.json"
 
-# فسحة بين كل صندوق وتاني حتى ما نرهق justETF بطلبات متتالية ضخمة
-SLEEP_BETWEEN = 2.5
+# فسحة بين كل صندوق وتاني — رفعناها من 2.5 لـ5 ثانية لتقليل احتمال الحظر أصلاً
+SLEEP_BETWEEN = 5.0
+
+# لو صادفنا 403 (حظر مؤقت من justETF)، نستنى فترة طويلة قبل ما نكمل — الحظر
+# غالباً مؤقت وبينفك بعد كذا دقيقة
+COOLDOWN_ON_BLOCK = 90.0
+
+# محاولات لكل صندوق (المحاولة الأولى + إعادة محاولات) قبل ما نعتبره فشل نهائي
+MAX_ATTEMPTS = 2
 
 
 def load_isins():
@@ -94,6 +101,25 @@ def scrape_one(isin):
     }
 
 
+def scrape_with_retries(isin):
+    """يحاول MAX_ATTEMPTS مرة. لو الخطأ فيه '403' (حظر مؤقت)، يستنى COOLDOWN
+    كامل قبل إعادة المحاولة. أخطاء تانية (زي فشل جلب السعر الحي العابر) يعيد
+    المحاولة بعد فسحة عادية بس."""
+    last_error = None
+    for attempt in range(1, MAX_ATTEMPTS + 1):
+        try:
+            return scrape_one(isin), None
+        except Exception as e:
+            last_error = e
+            is_block = "403" in str(e)
+            if attempt < MAX_ATTEMPTS:
+                wait = COOLDOWN_ON_BLOCK if is_block else SLEEP_BETWEEN
+                print(f"محاولة {attempt} فشلت ({e}) — استنى {wait:.0f}ث وحاول تاني... ",
+                      end="", flush=True)
+                time.sleep(wait)
+    return None, last_error
+
+
 def main():
     isins = load_isins()
     if not isins:
@@ -102,32 +128,44 @@ def main():
 
     print(f"=== بدء سحب {len(isins)} صندوق من justETF ===")
     results = {}
-    failed = []
+    failed = {}  # isin -> آخر رسالة خطأ
 
-    for i, isin in enumerate(isins, 1):
-        print(f"[{i}/{len(isins)}] {isin} ... ", end="", flush=True)
-        try:
-            data = scrape_one(isin)
-            results[isin] = data
-            print("تم ✓")
-        except Exception as e:
-            failed.append(isin)
-            print(f"فشل ({e})")
-            traceback.print_exc(file=sys.stdout)
-        time.sleep(SLEEP_BETWEEN)
+    def run_pass(pending_isins, label):
+        for i, isin in enumerate(pending_isins, 1):
+            print(f"[{label} {i}/{len(pending_isins)}] {isin} ... ", end="", flush=True)
+            data, err = scrape_with_retries(isin)
+            if data is not None:
+                results[isin] = data
+                failed.pop(isin, None)
+                print("تم ✓")
+            else:
+                failed[isin] = str(err)
+                print(f"فشل نهائياً ({err})")
+                traceback.print_exc(file=sys.stdout)
+            time.sleep(SLEEP_BETWEEN)
+
+    run_pass(isins, "أولى")
+
+    # جولة أخيرة على أي صندوق فشل بالجولة الأولى — بعد ما خلصت باقي القائمة
+    # غالباً فترة كافية مرّت لأي حظر مؤقت ينفك لحاله
+    if failed:
+        print(f"\n=== جولة إعادة محاولة نهائية لـ {len(failed)} صندوق فشلوا ===")
+        print(f"استراحة {COOLDOWN_ON_BLOCK:.0f}ث قبل المحاولة الأخيرة...")
+        time.sleep(COOLDOWN_ON_BLOCK)
+        run_pass(list(failed.keys()), "إعادة")
 
     snapshot = {
         "generatedAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "count": len(results),
-        "failed": failed,
+        "failed": list(failed.keys()),
         "funds": results,
     }
     OUTPUT_FILE.write_text(
         json.dumps(snapshot, ensure_ascii=False, indent=None), encoding="utf-8"
     )
-    print(f"=== خلصنا: {len(results)} نجح، {len(failed)} فشل ===")
+    print(f"=== خلصنا: {len(results)} نجح، {len(failed)} فشل نهائياً ===")
     if failed:
-        print("الصناديق يلي فشلوا:", ", ".join(failed))
+        print("الصناديق يلي فشلوا نهائياً:", ", ".join(failed.keys()))
 
 
 if __name__ == "__main__":
