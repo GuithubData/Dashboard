@@ -1,48 +1,175 @@
 # سطر ISIN واحد لكل صندوق (تعليق بـ # يتجاهل). زيد أي صندوق جديد هون وادفع (commit) —
 # أول تشغيل GitHub Action جاي (أو تشغيل يدوي) رح يسحبه تلقائياً.
+#
+# القائمة موسّعة من: eu-us-mapping.json الأصلي + أول 6 صفحات من فلتر أسهم justETF
+# (assetClass=class-equity، مرتب حسب حجم الصندوق) + صناديق AI/تقنية قطاعية.
 
-IE00B5BMR087   # iShares Core S&P 500 UCITS ETF
-IE00B3XXRP09   # Vanguard S&P 500 UCITS ETF
-IE0032077012   # Invesco EQQQ Nasdaq-100 UCITS ETF
-IE00B4L5Y983   # iShares Core MSCI World UCITS ETF
-IE00BJ0KDQ92   # Xtrackers MSCI World UCITS ETF
-IE00BK5BQT80   # Vanguard FTSE All-World UCITS ETF (Acc)
-IE00BKM4GZ66   # iShares Core MSCI EM IMI UCITS ETF
-DE0005933931   # iShares Core DAX UCITS ETF
-IE00B53L3W79   # iShares Core EURO STOXX 50 UCITS ETF
-IE000BI8OT95   # Amundi Core MSCI World UCITS ETF
-IE00BFY0GT14   # SPDR MSCI World UCITS ETF
-IE00BTJRMP35   # Xtrackers MSCI Emerging Markets UCITS ETF
-IE00B0M63177   # iShares MSCI EM UCITS ETF
 DE0002635307   # iShares STOXX Europe 600 UCITS ETF
-IE00BMFKG444   # Xtrackers Nasdaq 100 UCITS ETF
-IE00B52SFT06   # iShares MSCI USA UCITS ETF
-IE00BKX55T58   # Vanguard FTSE Developed World UCITS ETF
-IE00B6R52259   # iShares MSCI ACWI UCITS ETF
-IE000Z9SJA06   # Xtrackers S&P 500 UCITS ETF 1C (Acc)
-IE00B02KXH56   # iShares MSCI Japan UCITS ETF USD (Dist)
-IE00BJ5JPG56   # iShares MSCI China UCITS ETF USD (Acc)
-IE00B3WJKG14   # iShares S&P 500 Information Technology Sector UCITS ETF USD (Acc)
-IE00BK5BCD43   # L&G Artificial Intelligence UCITS ETF
-NL0011683594   # VanEck Morningstar Developed Markets Dividend Leaders UCITS ETF
+DE0005933931   # iShares Core DAX UCITS ETF
+DE000A0F5UF5   # iShares Nasdaq 100 UCITS ETF (DE)
 DE000A0F5UH1   # iShares STOXX Global Select Dividend 100 UCITS ETF (DE)
-IE00BP3QZ601   # iShares Edge MSCI World Quality Factor UCITS ETF (Acc)
-IE00BP3QZB59   # iShares Edge MSCI World Value Factor UCITS ETF (Acc)
-IE00BP3QZ825   # iShares Edge MSCI World Momentum Factor UCITS ETF (Acc)
-IE00B53SZB19   # iShares NASDAQ 100 UCITS ETF USD (Acc)
-IE00BFMXXD54   # Vanguard S&P 500 UCITS ETF USD (Acc)
-IE00BMTX1Y45   # iShares S&P 500 Swap UCITS ETF USD (Acc)
-IE00B4K48X80   # iShares Core MSCI Europe UCITS ETF EUR (Acc)
-IE0008470928   # iShares STOXX Europe 50 UCITS ETF
+DE000A0F5UJ7   # iShares STOXX Europe 600 Banks UCITS ETF (DE)
+DE000A0Q4R85   # iShares MSCI Brazil UCITS ETF (DE) USD (Acc)
 DE000ETFL508   # Deka MSCI World UCITS ETF
-IE00B3YLTY66   # SPDR MSCI ACWI IMI UCITS ETF
-IE00B5L8K969   # iShares MSCI EM Asia UCITS ETF
-IE00BMC38736   # VanEck Semiconductor UCITS ETF
+FR0007052782   # Amundi CAC 40 UCITS ETF Dist
+FR0007054358   # Amundi EURO STOXX 50 II UCITS ETF Acc
+FR0011550177   # BNP Paribas Easy S&P 500 UCITS ETF USD (Acc)
+FR0011550185   # BNP Paribas Easy S&P 500 UCITS ETF EUR
+IE0000XTDDA8   # Global X Artificial Intelligence UCITS ETF USD Accumulating
+IE0000ZL1RD2   # Global X AI Semiconductor & Quantum UCITS ETF USD Acc
+IE0002W8NB38   # iShares MSCI USA Swap UCITS ETF USD (Acc)
+IE0002Y8CX98   # WisdomTree Europe Defence UCITS ETF EUR Unhedged Acc
+IE0003A512E4   # ARK Artificial Intelligence & Robotics UCITS ETF USD Accumulating
+IE0005042456   # iShares Core FTSE 100 UCITS ETF GBP (Dist)
+IE0006WW1TQ4   # Xtrackers MSCI World ex USA UCITS ETF 1C
+IE000716YHJ7   # Invesco FTSE All-World UCITS ETF
+IE0008470928   # iShares STOXX Europe 50 UCITS ETF
+IE0008471009   # iShares Core EURO STOXX 50 UCITS ETF EUR (Dist)
+IE0009HF1MK9   # Amundi Prime All Country World UCITS ETF Dist
+IE000BI8OT95   # Amundi Core MSCI World UCITS ETF
+IE000E7EI9P0   # Amundi S&P Global Information Technology ESG UCITS ETF DR EUR (A)
+IE000FSN19U2   # Amundi Core MSCI USA UCITS ETF Acc
+IE000G0E83X3   # iShares AI Innovation Active UCITS ETF USD (Acc)
+IE000GEHNQU9   # Amundi S&P Global Information Technology ESG UCITS ETF DR EUR (D)
+IE000HY30YW6   # Xtrackers S&P 500 Swap II UCITS ETF 1C
 IE000I8KRLL9   # iShares MSCI Global Semiconductors UCITS ETF
-IE00BQQP9F84   # VanEck Gold Miners UCITS ETF
+IE000IM4K4K2   # Franklin AI, Metaverse and Blockchain UCITS ETF
+IE000JHYO4T6   # UBS MSCI Japan Climate Paris Aligned UCITS ETF ir-hEUR acc
+IE000KXCEXR3   # Amundi S&P 500 Screened UCITS ETF Acc
+IE000LCKJ888   # WisdomTree Physical AI, Humanoids and Drones UCITS ETF USD Unhedged Acc
+IE000LFC57H7   # Invesco MSCI ACWI Islamic M-Series UCITS ETF Acc
+IE000LGWDNE5   # Invesco Artificial Intelligence Enablers UCITS ETF
+IE000MLMNYS0   # iShares S&P 500 Equal Weight UCITS ETF USD (Acc)
+IE000NX8S1Z1   # Boreas S&P AI Data, Power & Infrastructure UCITS ETF USD (Acc)
+IE000Q0IU5T1   # Invesco S&P World Information Technology ESG UCITS ETF Acc
+IE000Q8N7WY1   # Robeco 3D Global Equity UCITS ETF USD Acc
+IE000Q9W2IR3   # iShares AI Adopters & Applications UCITS ETF USD (Acc)
+IE000UOXRAM8   # Invesco Dow Jones Islamic Global Developed Markets UCITS ETF
+IE000WUTBLT5   # Defiance AI & Power Infrastructure UCITS ETF Acc
+IE000X59ZHE2   # iShares AI Infrastructure UCITS ETF USD (Acc)
+IE000XHZP7D3   # WisdomTree AI Infrastructure UCITS ETF - USD Acc
+IE000XZSV718   # State Street SPDR S&P 500 UCITS ETF USD Unhedged (Acc)
+IE000YYE6WK5   # VanEck Defense UCITS ETF A
+IE000Z9SJA06   # Xtrackers S&P 500 UCITS ETF 1C (Acc)
+IE0031442068   # iShares Core S&P 500 UCITS ETF USD (Dist)
+IE0032077012   # Invesco EQQQ Nasdaq-100 UCITS ETF
+IE00B02KXH56   # iShares MSCI Japan UCITS ETF USD (Dist)
+IE00B0M63177   # iShares MSCI EM UCITS ETF
 IE00B1XNHC34   # iShares Global Clean Energy Transition UCITS ETF USD (Dist)
 IE00B27YCN58   # iShares MSCI World Islamic UCITS ETF
-IE000UOXRAM8   # Invesco Dow Jones Islamic Global Developed Markets UCITS ETF
 IE00B27YCP72   # iShares MSCI Emerging Markets Islamic UCITS ETF
 IE00B296QM64   # iShares MSCI USA Islamic UCITS ETF
-IE000LFC57H7   # Invesco MSCI ACWI Islamic M-Series UCITS ETF Acc
+IE00B3RBWM25   # Vanguard FTSE All-World UCITS ETF (USD) Distributing
+IE00B3VVMM84   # Vanguard FTSE Emerging Markets UCITS ETF (USD) Distributing
+IE00B3WJKG14   # iShares S&P 500 Information Technology Sector UCITS ETF USD (Acc)
+IE00B3XXRP09   # Vanguard S&P 500 UCITS ETF
+IE00B3YCGJ38   # Invesco S&P 500 UCITS ETF
+IE00B3YLTY66   # SPDR MSCI ACWI IMI UCITS ETF
+IE00B441G979   # iShares MSCI World EUR Hedged UCITS ETF (Acc)
+IE00B44Z5B48   # State Street SPDR MSCI All Country World UCITS ETF USD Unhedged (Acc)
+IE00B4K48X80   # iShares Core MSCI Europe UCITS ETF EUR (Acc)
+IE00B4L5Y983   # iShares Core MSCI World UCITS ETF
+IE00B4L5YX21   # iShares Core MSCI Japan IMI UCITS ETF
+IE00B4X9L533   # HSBC MSCI World UCITS ETF USD
+IE00B4YBJ215   # State Street SPDR S&P 400 U.S. Mid Cap UCITS ETF USD Unhedged (Acc)
+IE00B52MJY50   # iShares Core MSCI Pacific ex Japan UCITS ETF (Acc)
+IE00B52SFT06   # iShares MSCI USA UCITS ETF
+IE00B52VJ196   # iShares MSCI Europe SRI UCITS ETF (Acc)
+IE00B53HP851   # iShares Core FTSE 100 UCITS ETF GBP (Acc)
+IE00B53L3W79   # iShares Core EURO STOXX 50 UCITS ETF
+IE00B53QG562   # iShares Core MSCI EMU UCITS ETF EUR (Acc)
+IE00B53SZB19   # iShares NASDAQ 100 UCITS ETF USD (Acc)
+IE00B5BMR087   # iShares Core S&P 500 UCITS ETF
+IE00B5L8K969   # iShares MSCI EM Asia UCITS ETF
+IE00B5SSQT16   # HSBC MSCI Emerging Markets UCITS ETF USD
+IE00B60SX170   # Invesco MSCI USA UCITS ETF
+IE00B6R52259   # iShares MSCI ACWI UCITS ETF
+IE00B6YX5C33   # State Street SPDR S&P 500 UCITS ETF USD Unhedged (Dist)
+IE00B6YX5D40   # State Street SPDR S&P U.S. Dividend Aristocrats UCITS ETF USD Unhedged (Dist)
+IE00B810Q511   # Vanguard FTSE 100 UCITS ETF (GBP) Distributing
+IE00B945VV12   # Vanguard FTSE Developed Europe UCITS ETF Distributing
+IE00BDVPNG13   # WisdomTree Artificial Intelligence UCITS ETF USD Acc
+IE00BF4G6Y48   # JPMorgan Global Research Enhanced Index Equity Active UCITS ETF USD (acc)
+IE00BF4RFH31   # iShares MSCI World Small Cap UCITS ETF
+IE00BFMXXD54   # Vanguard S&P 500 UCITS ETF USD (Acc)
+IE00BFNM3D14   # iShares MSCI Europe Screened UCITS ETF EUR (Acc)
+IE00BFNM3G45   # iShares MSCI USA Screened UCITS ETF USD (Acc)
+IE00BFNM3J75   # iShares MSCI World Screened UCITS ETF USD (Acc)
+IE00BFNM3P36   # iShares MSCI EM IMI Screened UCITS ETF USD (Acc)
+IE00BFY0GT14   # SPDR MSCI World UCITS ETF
+IE00BFZXGZ54   # Invesco EQQQ Nasdaq-100 UCITS ETF Acc
+IE00BGHQ0G80   # Xtrackers MSCI AC World Screened UCITS ETF 1C
+IE00BGV5VN51   # Xtrackers Artificial Intelligence & Big Data UCITS ETF 1C
+IE00BH4GPZ28   # State Street SPDR S&P 500 Leaders UCITS ETF USD Unhedged (Acc)
+IE00BHZPJ015   # iShares MSCI EMU CTB Enhanced ESG UCITS ETF EUR (Acc)
+IE00BHZPJ239   # iShares MSCI EM CTB Enhanced ESG UCITS ETF USD (Acc)
+IE00BHZPJ569   # iShares MSCI World CTB Enhanced ESG UCITS ETF USD (Acc)
+IE00BHZPJ676   # iShares MSCI Europe CTB Enhanced ESG UCITS ETF EUR (Dist)
+IE00BHZPJ890   # iShares MSCI USA CTB Enhanced ESG UCITS ETF USD (Dist)
+IE00BHZRR030   # Franklin FTSE Korea UCITS ETF
+IE00BJ0KDQ92   # Xtrackers MSCI World UCITS ETF
+IE00BJ38QD84   # State Street SPDR Russell 2000 U.S. Small Cap UCITS ETF USD
+IE00BJ5JNY98   # iShares MSCI World Information Technology Sector Advanced UCITS ETF USD (Dist)
+IE00BJ5JPG56   # iShares MSCI China UCITS ETF USD (Acc)
+IE00BK1PV551   # Xtrackers MSCI World UCITS ETF 1D
+IE00BK5BCD43   # L&G Artificial Intelligence UCITS ETF
+IE00BK5BQT80   # Vanguard FTSE All-World UCITS ETF (Acc)
+IE00BK5BQV03   # Vanguard FTSE Developed World UCITS ETF Acc
+IE00BKM4GZ66   # iShares Core MSCI EM IMI UCITS ETF
+IE00BKX55S42   # Vanguard FTSE Developed Europe ex UK UCITS ETF (EUR) Distributing
+IE00BKX55T58   # Vanguard FTSE Developed World UCITS ETF
+IE00BL25JM42   # Xtrackers MSCI World Value UCITS ETF 1C
+IE00BLCHJB90   # Global X Robotics & Artificial Intelligence UCITS ETF USD Accumulating
+IE00BM67HK77   # Xtrackers MSCI World Health Care UCITS ETF 1C
+IE00BM67HT60   # Xtrackers MSCI World Information Technology UCITS ETF 1C
+IE00BMC38736   # VanEck Semiconductor UCITS ETF
+IE00BMFKG444   # Xtrackers Nasdaq 100 UCITS ETF
+IE00BMG6Z448   # iShares MSCI EM ex-China UCITS ETF USD (Acc)
+IE00BMTX1Y45   # iShares S&P 500 Swap UCITS ETF USD (Acc)
+IE00BP3QZ601   # iShares Edge MSCI World Quality Factor UCITS ETF (Acc)
+IE00BP3QZ825   # iShares Edge MSCI World Momentum Factor UCITS ETF (Acc)
+IE00BP3QZB59   # iShares Edge MSCI World Value Factor UCITS ETF (Acc)
+IE00BQQP9F84   # VanEck Gold Miners UCITS ETF
+IE00BTJRMP35   # Xtrackers MSCI Emerging Markets UCITS ETF
+IE00BYPLS672   # L&G Cyber Security UCITS ETF
+IE00BYTRRD19   # State Street SPDR MSCI World Technology UCITS ETF USD
+IE00BYX2JD69   # iShares MSCI World SRI UCITS ETF EUR (Acc)
+IE00BYZK4552   # iShares Automation & Robotics UCITS ETF
+IE00BZ02LR44   # Xtrackers MSCI World ESG UCITS ETF 1C
+IE00BZCQB185   # iShares MSCI India UCITS ETF USD (Acc)
+LU0274208692   # Xtrackers MSCI World Swap UCITS ETF 1C
+LU0274209740   # Xtrackers MSCI Japan UCITS ETF 1C
+LU0274210672   # Xtrackers MSCI USA Swap UCITS ETF 1C
+LU0274211217   # Xtrackers EURO STOXX 50 UCITS ETF 1D
+LU0274211480   # Xtrackers DAX UCITS ETF 1C
+LU0328475792   # Xtrackers STOXX Europe 600 UCITS ETF 1C
+LU0380865021   # Xtrackers EURO STOXX 50 UCITS ETF 1C
+LU0490618542   # Xtrackers S&P 500 Swap UCITS ETF 1C
+LU0496786657   # Amundi Core S&P 500 Swap UCITS ETF USD Dist
+LU0533033667   # Amundi MSCI World Information Technology UCITS ETF EUR Acc
+LU0533033741   # Amundi MSCI World Information Technology UCITS ETF USD Acc
+LU0629459743   # UBS MSCI World Socially Responsible UCITS ETF USD dis
+LU0908500753   # Amundi Core Stoxx Europe 600 UCITS ETF Acc
+LU0950668870   # UBS Core MSCI EMU UCITS ETF EUR acc
+LU1135865084   # Amundi Core S&P 500 Swap UCITS ETF Acc
+LU1291099718   # BNP Paribas Easy MSCI Europe Min TE UCITS ETF
+LU1437015735   # Amundi Core MSCI Europe UCITS ETF Acc
+LU1437017350   # Amundi Core MSCI Emerging Markets UCITS ETF Acc
+LU1681043599   # Amundi MSCI World Swap UCITS ETF EUR Acc
+LU1681045370   # Amundi MSCI Emerging Markets Swap UCITS ETF EUR Acc
+LU1681047236   # Amundi Core EURO STOXX 50 UCITS ETF EUR Acc
+LU1681049018   # Amundi S&P 500 Swap UCITS ETF USD Acc
+LU1781541252   # Amundi Core MSCI Japan UCITS ETF Acc
+LU1829219390   # Amundi Euro Stoxx Banks UCITS ETF Acc
+LU1829221024   # Amundi Core Nasdaq-100 Swap UCITS ETF Acc
+LU1834983477   # Amundi STOXX Europe 600 Banks UCITS ETF Acc
+LU1861132840   # Amundi MSCI Robotics & AI UCITS ETF Acc
+LU1971906802   # UBS EURO STOXX 50 ESG UCITS ETF EUR dis
+LU2009147757   # Xtrackers S&P 500 Swap UCITS ETF 1D
+LU2009202107   # Amundi MSCI Emerging Ex China UCITS ETF Acc
+LU2263803533   # Xtrackers MSCI World Swap UCITS ETF 1D
+LU2572257124   # Amundi Core MSCI World Swap UCITS ETF Dist
+LU2573966905   # Amundi Core MSCI Emerging Markets Swap UCITS ETF Dist
+LU2573967036   # Amundi Core MSCI Emerging Markets Swap UCITS ETF Acc
+LU3098954871   # TEQ - General Artificial Intelligence R EUR UCITS ETF (Acc)
+NL0011683594   # VanEck Morningstar Developed Markets Dividend Leaders UCITS ETF
