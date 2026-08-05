@@ -1,0 +1,48 @@
+# سطر ISIN واحد لكل صندوق (تعليق بـ # يتجاهل). زيد أي صندوق جديد هون وادفع (commit) —
+# أول تشغيل GitHub Action جاي (أو تشغيل يدوي) رح يسحبه تلقائياً.
+
+IE00B5BMR087   # iShares Core S&P 500 UCITS ETF
+IE00B3XXRP09   # Vanguard S&P 500 UCITS ETF
+IE0032077012   # Invesco EQQQ Nasdaq-100 UCITS ETF
+IE00B4L5Y983   # iShares Core MSCI World UCITS ETF
+IE00BJ0KDQ92   # Xtrackers MSCI World UCITS ETF
+IE00BK5BQT80   # Vanguard FTSE All-World UCITS ETF (Acc)
+IE00BKM4GZ66   # iShares Core MSCI EM IMI UCITS ETF
+DE0005933931   # iShares Core DAX UCITS ETF
+IE00B53L3W79   # iShares Core EURO STOXX 50 UCITS ETF
+IE000BI8OT95   # Amundi Core MSCI World UCITS ETF
+IE00BFY0GT14   # SPDR MSCI World UCITS ETF
+IE00BTJRMP35   # Xtrackers MSCI Emerging Markets UCITS ETF
+IE00B0M63177   # iShares MSCI EM UCITS ETF
+DE0002635307   # iShares STOXX Europe 600 UCITS ETF
+IE00BMFKG444   # Xtrackers Nasdaq 100 UCITS ETF
+IE00B52SFT06   # iShares MSCI USA UCITS ETF
+IE00BKX55T58   # Vanguard FTSE Developed World UCITS ETF
+IE00B6R52259   # iShares MSCI ACWI UCITS ETF
+IE000Z9SJA06   # Xtrackers S&P 500 UCITS ETF 1C (Acc)
+IE00B02KXH56   # iShares MSCI Japan UCITS ETF USD (Dist)
+IE00BJ5JPG56   # iShares MSCI China UCITS ETF USD (Acc)
+IE00B3WJKG14   # iShares S&P 500 Information Technology Sector UCITS ETF USD (Acc)
+IE00BK5BCD43   # L&G Artificial Intelligence UCITS ETF
+NL0011683594   # VanEck Morningstar Developed Markets Dividend Leaders UCITS ETF
+DE000A0F5UH1   # iShares STOXX Global Select Dividend 100 UCITS ETF (DE)
+IE00BP3QZ601   # iShares Edge MSCI World Quality Factor UCITS ETF (Acc)
+IE00BP3QZB59   # iShares Edge MSCI World Value Factor UCITS ETF (Acc)
+IE00BP3QZ825   # iShares Edge MSCI World Momentum Factor UCITS ETF (Acc)
+IE00B53SZB19   # iShares NASDAQ 100 UCITS ETF USD (Acc)
+IE00BFMXXD54   # Vanguard S&P 500 UCITS ETF USD (Acc)
+IE00BMTX1Y45   # iShares S&P 500 Swap UCITS ETF USD (Acc)
+IE00B4K48X80   # iShares Core MSCI Europe UCITS ETF EUR (Acc)
+IE0008470928   # iShares STOXX Europe 50 UCITS ETF
+DE000ETFL508   # Deka MSCI World UCITS ETF
+IE00B3YLTY66   # SPDR MSCI ACWI IMI UCITS ETF
+IE00B5L8K969   # iShares MSCI EM Asia UCITS ETF
+IE00BMC38736   # VanEck Semiconductor UCITS ETF
+IE000I8KRLL9   # iShares MSCI Global Semiconductors UCITS ETF
+IE00BQQP9F84   # VanEck Gold Miners UCITS ETF
+IE00B1XNHC34   # iShares Global Clean Energy Transition UCITS ETF USD (Dist)
+IE00B27YCN58   # iShares MSCI World Islamic UCITS ETF
+IE000UOXRAM8   # Invesco Dow Jones Islamic Global Developed Markets UCITS ETF
+IE00B27YCP72   # iShares MSCI Emerging Markets Islamic UCITS ETF
+IE00B296QM64   # iShares MSCI USA Islamic UCITS ETF
+IE000LFC57H7   # Invesco MSCI ACWI Islamic M-Series UCITS ETF Acc
