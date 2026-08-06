@@ -20,12 +20,15 @@ PHP بس.
 import dataclasses
 import datetime
 import json
+import re
 import sys
 import time
 import traceback
 from pathlib import Path
 
 import justetf_scraping
+import requests
+from bs4 import BeautifulSoup
 
 ISINS_FILE = Path(__file__).parent / "isins.txt"
 OUTPUT_FILE = Path(__file__).parent / "justetf_snapshot.json"
@@ -41,6 +44,18 @@ MAX_ATTEMPTS = 2
 
 # حجم كل دفعة أسبوعية — ~40 صندوق حسب طلبك
 BATCH_SIZE = 40
+
+# ═══ الوضع الضريبي (Tax status) — مش موجود بمكتبة justetf_scraping أصلاً،
+# فبنسحبه يدوياً من نفس صفحة الملف الشخصي للصندوق على justETF (قسم
+# #collapse-tax تحت تبويب Basics) ═══
+JUSTETF_PROFILE_URL_TMPL = "https://www.justetf.com/en/etf-profile.html?isin={isin}"
+TAX_REQUEST_HEADERS = {
+    "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/124.0 Safari/537.36"),
+    "Accept-Language": "en-GB,en;q=0.9",
+}
+TAX_REQUEST_TIMEOUT = 20
 
 
 def get_this_weeks_batch(isins):
@@ -99,6 +114,56 @@ def jsonable_quote(quote):
     return d
 
 
+def scrape_tax_status(isin):
+    """بيسحب قسم "Tax status" (#collapse-tax) من صفحة الملف الشخصي للصندوق
+    على justETF مباشرة (مش عبر مكتبة justetf_scraping، لأنها ما بتغطي هاد
+    الحقل). بيرجّع قاموس {اسم_الدولة: الوضع} زي ما هو ظاهر بالجدول
+    (مثلاً {"Germany": "No tax rebate", "Switzerland": "ESTV Reporting", ...})
+    أو None لو تعذّر السحب أو ما لقينا القسم أصلاً (بعض الصناديق ما إلها
+    هاد القسم).
+
+    ⚠️ هشاشة: هاد اعتماد على تركيب HTML الحالي لصفحة justETF (id="collapse-tax"
+    جوا تبويب Basics) — لو غيّروا تصميم الصفحة بالمستقبل، لازم تحديث الـ
+    selector هون."""
+    url = JUSTETF_PROFILE_URL_TMPL.format(isin=isin)
+    resp = requests.get(url, headers=TAX_REQUEST_HEADERS, timeout=TAX_REQUEST_TIMEOUT)
+    if resp.status_code != requests.codes.ok:
+        raise RuntimeError(f"HTTP {resp.status_code} عند جلب صفحة {isin} لقسم الضرائب")
+
+    soup = BeautifulSoup(resp.text, "html.parser")
+    section = soup.find(id="collapse-tax")
+    if section is None:
+        # احتياط لو تغيّر الـ id — دوّر على العنوان "Tax status" وخد أقرب جدول بعده
+        heading = soup.find(string=re.compile(r"Tax\s*status", re.I))
+        section = heading.find_parent(["section", "div"]) if heading else None
+    if section is None:
+        return None  # هاد الصندوق ما إلو قسم tax status أصلاً (طبيعي لبعض الصناديق)
+
+    result = {}
+    # الجدول جوا القسم بيصير إما <table> حقيقي أو صفوف <div>/<dl> — نجرب الاتنين
+    table = section.find("table")
+    if table:
+        for row in table.find_all("tr"):
+            cells = row.find_all(["th", "td"])
+            if len(cells) >= 2:
+                country = cells[0].get_text(strip=True)
+                status = cells[1].get_text(strip=True)
+                if country:
+                    result[country] = status or "-"
+    if not result:
+        # نسخة احتياطية: صفوف بشكل dl/dt/dd أو div-based
+        dts = section.find_all("dt")
+        dds = section.find_all("dd")
+        if dts and len(dts) == len(dds):
+            for dt, dd in zip(dts, dds):
+                country = dt.get_text(strip=True)
+                status = dd.get_text(strip=True)
+                if country:
+                    result[country] = status or "-"
+
+    return result or None
+
+
 def scrape_one(isin):
     overview = justetf_scraping.get_etf_overview(isin)
     return {
@@ -126,7 +191,21 @@ def scrape_one(isin):
             for h in (overview.get("top_holdings") or [])
         ],
         "gettexQuote": jsonable_quote(overview.get("gettex")),
+        "taxStatus": scrape_tax_status_safe(isin),
     }
+
+
+def scrape_tax_status_safe(isin):
+    """نسخة "لا تفشل": بتحاول مرة وحدة إضافية بسيطة، وإذا فشلت بترجع None
+    بدل ما توقف سحب باقي بيانات الصندوق (الـ TER/الحيازات...الخ أهم).
+    ما بتدخل بمنطق إعادة المحاولة/الـ 403-cooldown تبع scrape_with_retries
+    الرئيسي عشان ما تبطّئ الدفعة كلها لصندوق واحد."""
+    try:
+        time.sleep(1.5)  # فسحة إضافية بسيطة — هاد طلب ثاني منفصل لنفس الصندوق
+        return scrape_tax_status(isin)
+    except Exception as e:
+        print(f"[tax-status] فشل سحب الوضع الضريبي لـ {isin} ({e}) — رح نكمل بدونه")
+        return None
 
 
 def scrape_with_retries(isin):
