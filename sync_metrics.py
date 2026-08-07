@@ -30,16 +30,25 @@ def main():
         print("ids.txt غير موجود — بوقف.")
         sys.exit(1)
 
+    # ⚠️ إصلاح: كنا ناخد السطر كامل (بما فيه التعليقات inline بـ #) كـISIN — هيك كل
+    # ISIN كان عملياً بيفشل يطابق df.index (0 صندوق تحديث دايماً). هلق منتجاهل أي سطر
+    # تعليق بالكامل (يبلش بـ#)، ومنقص أي تعليق inline بعد الـISIN، بنفس منطق
+    # update_profile.py's load_isins().
     isins = set()
     for line in IDS_FILE.read_text().splitlines():
         line = line.strip()
-        if line:
-            isins.add(line.upper())
+        if not line or line.startswith("#"):
+            continue
+        code = line.split("#", 1)[0].strip()  # نحذف أي تعليق inline بعد الـISIN
+        if not code:
+            continue
+        isins.add(code.split()[0].upper())
 
     if not isins:
         print("ids.txt فاضي — بوقف.")
         sys.exit(1)
 
+    print(f"قرأنا {len(isins)} ISIN من ids.txt")
     print("جاري تحميل overview الكامل من justETF (كل الصناديق، نداء واحد)...")
     df = justetf_scraping.load_overview()
     df.index = df.index.astype(str).str.upper()
