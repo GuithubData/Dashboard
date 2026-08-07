@@ -1,14 +1,14 @@
 """
 sync_dataset_b.py — Layer 2 (بعد albertored/etfdb) لداشبورد estismar.de
 
-بيقرأ قائمة ISINs من ids.txt (سطر لكل صندوق)، وبيقسّمها لدفعات
-(BATCH_SIZE صندوق بكل دفعة)، وبكل تشغيلة أسبوعية بيسحب دفعة وحدة بس —
-مش الـ169 كلهم دفعة وحدة. هيك كل صندوق بيتحدّث تقريباً مرة كل 4 أسابيع
-(شهرياً تقريباً)، بس بضغط أقل بكتير بكل مرة وفرصة أقل للحظر.
+بيقرأ قائمة IDs من ids.txt (سطر لكل صندوق)، وبيقسّمها لدفعات
+(BATCH_SIZE صندوق بكل دفعة)، وبكل تشغيلة يومية بيسحب دفعة وحدة بس —
+مش الـ169 كلهم دفعة وحدة. هيك كل صندوق بيتحدّث تقريباً مرة كل عدد_الدفعات
+يوم (169÷7 ≈ 25 يوم)، بضغط خفيف جداً كل مرة.
 
 النتيجة الجديدة بتنكتب فوق dataset_b.json الموجود بدمج (merge) —
-مش استبدال كامل — يعني الصناديق يلي مش بدورهم هالأسبوع بضلوا محتفظين
-ببياناتهم من آخر تحديث ليهم، وبس دفعة هالأسبوع بتتحدّث.
+مش استبدال كامل — يعني الصناديق يلي مش بدورها اليوم بتضل محتفظة
+ببياناتها من آخر تحديث إلها، وبس دفعة اليوم بتتحدّث.
 
 يشتغل أسبوعياً عبر GitHub Actions (.github/workflows/dataset-b-refresh.yml)
 — مش على استضافة estismar.de نفسها، لأنو هاي مكتبة Python والاستضافة
@@ -43,7 +43,8 @@ COOLDOWN_ON_BLOCK = 90.0
 MAX_ATTEMPTS = 2
 
 # حجم كل دفعة أسبوعية — ~40 صندوق حسب طلبك
-BATCH_SIZE = 40
+# حجم كل دفعة يومية — 7 صناديق
+BATCH_SIZE = 7
 
 # ═══ الوضع الضريبي (Tax status) — مش موجود بمكتبة justetf_scraping أصلاً،
 # فبنسحبه يدوياً من نفس صفحة الملف الشخصي للصندوق على justETF (قسم
@@ -58,16 +59,16 @@ TAX_REQUEST_HEADERS = {
 TAX_REQUEST_TIMEOUT = 20
 
 
-def get_this_weeks_batch(isins):
-    """بيقسّم القائمة لدفعات بحجم BATCH_SIZE، وبيرجّع دفعة هالأسبوع —
-    محسوبة تلقائياً من رقم الأسبوع بالسنة (ISO week)، فمافي حاجة لأي إعداد
-    يدوي أو متغيّر خارجي. كل صندوق بيتحدّث تقريباً مرة كل عدد_الدفعات أسابيع."""
+def get_todays_batch(isins):
+    """بيقسّم القائمة لدفعات بحجم BATCH_SIZE، وبيرجّع دفعة اليوم —
+    محسوبة تلقائياً من رقم اليوم بالسنة (day-of-year)، فمافي حاجة لأي إعداد
+    يدوي أو متغيّر خارجي. كل صندوق بيتحدّث تقريباً مرة كل عدد_الدفعات يوم."""
     num_batches = max(1, -(-len(isins) // BATCH_SIZE))  # تقريب لأعلى
-    week_number = datetime.date.today().isocalendar()[1]
-    batch_index = week_number % num_batches
+    day_number = datetime.date.today().timetuple().tm_yday
+    batch_index = day_number % num_batches
     batch = isins[batch_index * BATCH_SIZE: (batch_index + 1) * BATCH_SIZE]
-    print(f"مجموع الدفعات: {num_batches} (كل وحدة ~{BATCH_SIZE} صندوق) — "
-          f"دفعة هالأسبوع (رقم {week_number}): دفعة #{batch_index} ({len(batch)} صندوق)")
+    print(f"مجموع الدفعات: {num_batches} (كل وحدة {BATCH_SIZE} صندوق) — "
+          f"دفعة اليوم (يوم رقم {day_number} بالسنة): دفعة #{batch_index} ({len(batch)} صندوق)")
     return batch
 
 
@@ -233,18 +234,18 @@ def main():
         print("ما في أي ISIN لسحبه — تأكد من ids.txt")
         sys.exit(1)
 
-    batch = get_this_weeks_batch(all_isins)
+    batch = get_todays_batch(all_isins)
     if not batch:
-        print("⚠️ دفعة هالأسبوع فاضية (غريب) — ما في شي لعمله")
+        print("⚠️ دفعة اليوم فاضية (غريب) — ما في شي لعمله")
         sys.exit(0)
 
-    # نبدأ من آخر snapshot موجود (بيانات باقي الدفعات من أسابيع سابقة) ونحدّث
-    # فيه بس دفعة هالأسبوع — مش نبني من صفر كل مرة
+    # نبدأ من آخر snapshot موجود (بيانات باقي الدفعات من أيام سابقة) ونحدّث
+    # فيه بس دفعة اليوم — مش نبني من صفر كل مرة
     results = load_existing_snapshot()
     print(f"صناديق محفوظة من دفعات سابقة: {len(results)}")
 
-    print(f"=== بدء سحب دفعة هالأسبوع: {len(batch)} صندوق من justETF ===")
-    failed = {}  # isin -> آخر رسالة خطأ (بس لصناديق دفعة هالأسبوع)
+    print(f"=== بدء سحب دفعة اليوم: {len(batch)} صندوق من justETF ===")
+    failed = {}  # isin -> آخر رسالة خطأ (بس لصناديق دفعة اليوم)
 
     def run_pass(pending_isins, label):
         for i, isin in enumerate(pending_isins, 1):
@@ -262,7 +263,7 @@ def main():
 
     run_pass(batch, "أولى")
 
-    # جولة أخيرة على أي صندوق فشل بدفعة هالأسبوع
+    # جولة أخيرة على أي صندوق فشل بدفعة اليوم
     if failed:
         print(f"\n=== جولة إعادة محاولة نهائية لـ {len(failed)} صندوق فشلوا ===")
         print(f"استراحة {COOLDOWN_ON_BLOCK:.0f}ث قبل المحاولة الأخيرة...")
@@ -272,15 +273,15 @@ def main():
     snapshot = {
         "generatedAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "count": len(results),
-        "failed": list(failed.keys()),  # فشل نهائي بدفعة هالأسبوع بس
+        "failed": list(failed.keys()),  # فشل نهائي بدفعة اليوم بس
         "funds": results,  # كل الصناديق المتراكمة من كل الدفعات
     }
     OUTPUT_FILE.write_text(
         json.dumps(snapshot, ensure_ascii=False, indent=None), encoding="utf-8"
     )
     print(f"=== خلصنا: {len(results)} صندوق بالمجموع بالملف "
-          f"({len(batch) - len(failed)}/{len(batch)} نجحوا بدفعة هالأسبوع)، "
-          f"{len(failed)} فشلوا نهائياً بدفعة هالأسبوع ===")
+          f"({len(batch) - len(failed)}/{len(batch)} نجحوا بدفعة اليوم)، "
+          f"{len(failed)} فشلوا نهائياً بدفعة اليوم ===")
     if failed:
         print("الصناديق يلي فشلوا نهائياً:", ", ".join(failed.keys()))
 
