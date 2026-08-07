@@ -1,0 +1,32 @@
+name: تحديث البيانات (دفعة يومية)
+on:
+  schedule:
+    # كل تشغيلة بتسحب دفعة صغيرة — يومياً الساعة UTC 03:00
+    - cron: "0 3 * * *" # Runs daily at 03:00 UTC
+  workflow_dispatch: {} # يسمح بتشغيل يدوي من تبويب Actions بالمستودع
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: pip install git+https://github.com/druzsan/justetf-scraping.git deep-translator
+      - name: Sync primary dataset
+        run: python sync_dataset_b.py
+      - name: Sync metrics
+        run: python sync_metrics.py
+      - name: Sync notes
+        run: python sync_notes.py
+      - name: Commit updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add dataset_b.json metrics.json notes_ar.json
+          git diff --staged --quiet || git commit -m "تحديث يومي للبيانات"
+          git push
